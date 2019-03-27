@@ -1,28 +1,48 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <ModelQueryPanel />
+    <ContnetPanel />
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import ModelQueryPanel from "./components/ModelQueryPanel.vue";
+import ContnetPanel from "./components/ContentPanel.vue";
 
 export default {
   name: "app",
   components: {
-    HelloWorld
+    ModelQueryPanel,
+    ContnetPanel
   }
 };
 </script>
 
 <style>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  background-color: lightgray;
+}
+.panel {
+  flex: 1;
+  border: 1px gray solid;
+  margin: 5px;
+  background-color: white;
+  display: flex;
+}
+.panel-model {
+  width: 300px;
+  height: 500px;
+  border-right: 1px gray solid;
+}
+.panel-query {
+  width: 100%;
+}
+.btn-tooltip {
+  font-size: 8px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  width: 14px !important;
+  height: 14px !important;
 }
 </style>
