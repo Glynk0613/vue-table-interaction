@@ -10,7 +10,7 @@
         <div class="item-wrapper">Meaures</div>
         <draggable v-model="measuresSrc" :group="{ name: 'measures', pull: 'clone', put: false}">
           <transition-group>
-            <div v-for="element in measuresSrc" :key="element.id" class="item-model">
+            <div v-for="(element, index) in measuresSrc" :key="'sm'+index" class="item-model">
               #
               <span> {{ element.id }} </span>
             </div>
@@ -19,7 +19,7 @@
         <div class="item-wrapper">Dimensions</div>
         <draggable v-model="dimensionsSrc" :group="{ name: 'dimensions', pull: 'clone', put: false}">
           <transition-group>
-            <div v-for="element in dimensionsSrc" :key="element.id" class="item-model">
+            <div v-for="(element, index) in dimensionsSrc" :key="'sd'+index" class="item-model">
               A
               <span> {{ element.id }} </span>
             </div>
@@ -37,7 +37,7 @@
           </div>
           <draggable v-model="meansuresQue" group="measures">
             <transition-group>
-              <div v-for="element in meansuresQue" :key="element.id" class="item-model">
+              <div v-for="(element, index) in meansuresQue" :key="'qm'+index" class="item-model">
                 #
                 <span> {{ element.id }} </span>
               </div>
@@ -48,9 +48,9 @@
             Dimensions
             <b-button v-b-tooltip.hover title="Tooltip content2" class="btn-tooltip">?</b-button>  
           </div>
-          <draggable v-model="filtersQue" group="dimensions">
+          <draggable v-model="dimensionsQue" group="dimensions" @change="changeDimensions">
             <transition-group>
-              <div v-for="element in filtersQue" :key="element.id" class="item-model">
+              <div v-for="(element, index) in dimensionsQue" :key="'qd'+index" class="item-model">
                 A
                 <span> {{ element.id }} </span>
               </div>
@@ -63,9 +63,9 @@
             Filters
             <b-button v-b-tooltip.hover title="Tooltip content" class="btn-tooltip">?</b-button>
           </div>
-          <draggable v-model="dimensionsQue" group="dimensions">
+          <draggable v-model="filtersQue" group="dimensions" @change="changeFilters">
             <transition-group>
-              <div v-for="element in dimensionsQue" :key="element.id" class="item-model">
+              <div v-for="(element, index) in filtersQue" :key="'qf'+index" class="item-model">
                 A
                 <span> {{ element.id }} </span>
               </div>
@@ -122,6 +122,31 @@ export default {
         { id: "Scenario", label: "Scenario" }
       ]
     };
+  },
+  methods: {
+    changeDimensions(e) {
+      if (e.added) {
+        let dup = false;
+        this.dimensionsQue.forEach((element, index) => {
+          if (element.id === e.added.element.id && index !== e.added.newIndex) dup = true;
+        });
+        if (dup) {
+          this.dimensionsQue.splice(e.added.newIndex, 1);
+        }
+      }
+    },
+    changeFilters(e) {
+      if (e.added) {
+        let dup = false;
+        this.filtersQue.forEach((element, index) => {
+          if (element.id === e.added.element.id && index !== e.added.newIndex) dup = true;
+        });
+        if (dup) {
+          this.filtersQue.splice(e.added.newIndex, 1);
+        }
+      }
+    }
+
   }
 };
 </script>
