@@ -11,7 +11,7 @@
         <draggable v-model="measuresSrc" :group="{ name: 'measures', pull: 'clone', put: false}">
           <transition-group>
             <div v-for="(element, index) in measuresSrc" :key="'sm'+index" class="item-model">
-              #
+              <span class="item-icon">#</span>
               <span>{{ element.id }}</span>
             </div>
           </transition-group>
@@ -23,7 +23,7 @@
         >
           <transition-group>
             <div v-for="(element, index) in dimensionsSrc" :key="'sd'+index" class="item-model">
-              A
+              <span><i class="fa fa-font"></i></span>
               <span>{{ element.id }}</span>
             </div>
           </transition-group>
@@ -41,11 +41,14 @@
             <div class="item-wrapper">
               <draggable v-model="measuresQue" group="measures" @change="changeMeasures">
                 <transition-group>
-                  <div v-for="(element, index) in measuresQue" :key="'qm'+index" class="item-content">
-                    <div class="item-model">
-                      #
+                  <div v-for="(element, index) in measuresQue" :key="'qm'+index" :class="element ? 'item-content' : 'item-blank'">
+                    <div v-if="element" class="item-model">
+                      <span class="item-icon">#</span>
                       <span>{{ element.id }}</span>
                     </div>
+                    <a v-if="element" class="item-remove" @click="removeMeasures(index)">
+                      <i class="fa fa-times-circle"></i>
+                    </a>
                   </div>
                 </transition-group>
               </draggable>
@@ -58,11 +61,14 @@
             <div class="item-wrapper">
               <draggable v-model="dimensionsQue" group="dimensions" @change="changeDimensions">
                 <transition-group>
-                  <div v-for="(element, index) in dimensionsQue" :key="'qd'+index" class="item-content">
-                    <div class="item-model">
-                      A
+                  <div v-for="(element, index) in dimensionsQue" :key="'qd'+index" :class="element ? 'item-content' : 'item-blank'">
+                    <div v-if="element" class="item-model">
+                      <span><i class="fa fa-font"></i></span>
                       <span>{{ element.id }}</span>
                     </div>
+                    <a v-if="element" class="item-remove" @click="removeDimensions(index)">
+                      <i class="fa fa-times-circle"></i>
+                    </a>
                   </div>
                 </transition-group>
               </draggable>
@@ -75,11 +81,14 @@
             <div class="item-wrapper">
               <draggable v-model="filtersQue" group="dimensions" @change="changeFilters">
                 <transition-group>
-                  <div v-for="(element, index) in filtersQue" :key="'qf'+index" class="item-content">
-                    <div class="item-model">
-                      A
+                  <div v-for="(element, index) in filtersQue" :key="'qf'+index" :class="element ? 'item-content' : 'item-blank'">
+                    <div v-if="element" class="item-model">
+                      <span><i class="fa fa-font"></i></span>
                       <span>{{ element.id }}</span>
                     </div>
+                    <a v-if="element" class="item-remove" @click="removeFilters(index)">
+                      <i class="fa fa-times-circle"></i>
+                    </a>
                   </div>
                 </transition-group>
               </draggable>
@@ -115,9 +124,9 @@ export default {
         { id: "Region", label: "Region" },
         { id: "Scenario", label: "Scenario" }
       ],
-      measuresQue: [],
-      dimensionsQue: [],
-      filtersQue: []
+      measuresQue: [null],
+      dimensionsQue: [null],
+      filtersQue: [null]
     };
   },
   methods: {
@@ -125,11 +134,16 @@ export default {
       if (e.added) {
         let dup = false;
         this.measuresQue.forEach((element, index) => {
+          if (!element) return;
           if (element.id === e.added.element.id && index !== e.added.newIndex)
             dup = true;
         });
         if (dup) {
           this.removeMeasures(e.added.newIndex);
+        }
+        const blankIndex = this.measuresQue.indexOf(null);
+        if (blankIndex > -1) {
+          this.removeMeasures(blankIndex);
         }
       }
     },
@@ -137,11 +151,16 @@ export default {
       if (e.added) {
         let dup = false;
         this.dimensionsQue.forEach((element, index) => {
+          if (!element) return;
           if (element.id === e.added.element.id && index !== e.added.newIndex)
             dup = true;
         });
         if (dup) {
           this.removeDimensions(e.added.newIndex);
+        }
+        const blankIndex = this.dimensionsQue.indexOf(null);
+        if (blankIndex > -1) {
+          this.removeDimensions(blankIndex);
         }
       }
     },
@@ -149,22 +168,36 @@ export default {
       if (e.added) {
         let dup = false;
         this.filtersQue.forEach((element, index) => {
+          if (!element) return;
           if (element.id === e.added.element.id && index !== e.added.newIndex)
             dup = true;
         });
         if (dup) {
           this.removeFilters(e.added.newIndex);
         }
+        const blankIndex = this.filtersQue.indexOf(null);
+        if (blankIndex > -1) {
+          this.removeFilters(blankIndex);
+        }
       }
     },
     removeMeasures(index) {
       this.measuresQue.splice(index, 1);
+      if (!this.measuresQue.length) {
+        this.measuresQue = [null];
+      }
     },
     removeDimensions(index) {
       this.dimensionsQue.splice(index, 1);
+      if (!this.dimensionsQue.length) {
+        this.dimensionsQue = [null];
+      }
     },
     removeFilters(index) {
       this.filtersQue.splice(index, 1);
+      if (!this.filtersQue.length) {
+        this.filtersQue = [null];
+      }
     }
   }
 };
