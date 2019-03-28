@@ -2,11 +2,11 @@
   <div class="panel">
     <div class="panel-model">
       <b-form-input type="text" placeholder="Enter your name"/>
-      <div v-b-toggle.collapse1 class="item-root">
-        >
+      <div v-b-toggle.collapse_left class="item-root">
+        <i class="fa fa-chevron-right"></i>
         <span>Test Task Data</span>
       </div>
-      <b-collapse id="collapse1" class="mt-2">
+      <b-collapse id="collapse_left" class="mt-2">
         <div class="item-label">Meaures</div>
         <draggable v-model="measuresSrc" :group="{ name: 'measures', pull: 'clone', put: false}">
           <transition-group>
@@ -49,9 +49,10 @@
                     :class="element ? 'item-content' : 'item-blank'"
                   >
                     <div v-if="element" class="item-left">
-                      <a class="item-drop">
+                      <a class="item-drop" @click="toggleSettingMeasures(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
+                      <ItemSettingsPanel v-if="showSettingMeasures[index]"/>
                       <span class="item-mode">{{ measuresMode[element.mode].label }}</span>
                       <div class="item-model">
                         <span class="item-icon">#</span>
@@ -79,9 +80,10 @@
                     :class="element ? 'item-content' : 'item-blank'"
                   >
                     <div v-if="element" class="item-left">
-                      <a class="item-drop">
+                      <a class="item-drop" @click="toggleSettingDimensions(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
+                      <ItemSettingsPanel v-if="showSettingDemensions[index]"/>
                       <div class="item-model">
                         <span class="item-icon">
                           <i class="fa fa-font"></i>
@@ -120,9 +122,10 @@
                     :class="element ? 'item-content' : 'item-blank'"
                   >
                     <div v-if="element" class="item-left">
-                      <a class="item-drop">
+                      <a class="item-drop" @click="toggleSettingFilters(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
+                      <ItemSettingsPanel v-if="showSettingFilters[index]"/>
                       <div class="item-model">
                         <span class="item-icon">
                           <i class="fa fa-font"></i>
@@ -152,6 +155,7 @@
 
 <script>
 import draggable from "vuedraggable";
+import ItemSettingsPanel from "./ItemSettingsPanel";
 import {
   MeasuresMode,
   DimensionsMode,
@@ -161,14 +165,32 @@ import {
 export default {
   name: "ModelQueryPanel",
   components: {
-    draggable
+    draggable,
+    ItemSettingsPanel
   },
   data() {
     return {
       measuresMode: MeasuresMode,
       dimensionsMode: DimensionsMode,
-      filtersMode: FiltersMode
+      filtersMode: FiltersMode,
+      showSettingMeasures: null,
+      showSettingDemensions: null,
+      showSettingFilters: null
     };
+  },
+  mounted: function () {
+    this.showSettingMeasures = [];
+    this.measuresSrc.forEach((element, index) => {
+      this.showSettingMeasures[index] = false;
+    });
+    this.showSettingDemensions = [];
+    this.dimensionsSrc.forEach((element, index) => {
+      this.showSettingDemensions[index] = false;
+    });
+    this.showSettingFilters = [];
+    this.dimensionsSrc.forEach((element, index) => {
+      this.showSettingFilters[index] = false;
+    });
   },
   computed: {
     measuresSrc: {
@@ -176,7 +198,7 @@ export default {
         return this.$store.getters.getStateMeasuresSrc;
       },
       set(value) {
-        this.$store.dispatch('updateMeasuresSrc', value);
+        this.$store.dispatch("updateMeasuresSrc", value);
       }
     },
     dimensionsSrc: {
@@ -184,7 +206,7 @@ export default {
         return this.$store.getters.getStateDimensionsSrc;
       },
       set(value) {
-        this.$store.dispatch('updateDimensionsSrc', value);
+        this.$store.dispatch("updateDimensionsSrc", value);
       }
     },
     measuresQue: {
@@ -192,7 +214,7 @@ export default {
         return this.$store.getters.getStateMeasuresQue;
       },
       set(value) {
-        this.$store.dispatch('updateMeasuresQue', value);
+        this.$store.dispatch("updateMeasuresQue", value);
       }
     },
     dimensionsQue: {
@@ -200,7 +222,7 @@ export default {
         return this.$store.getters.getStateDimensionsQue;
       },
       set(value) {
-        this.$store.dispatch('updateDimensionsQue', value);
+        this.$store.dispatch("updateDimensionsQue", value);
       }
     },
     filtersQue: {
@@ -208,7 +230,7 @@ export default {
         return this.$store.getters.getStateFiltersQue;
       },
       set(value) {
-        this.$store.dispatch('updateFiltersQue', value);
+        this.$store.dispatch("updateFiltersQue", value);
       }
     }
   },
@@ -267,17 +289,29 @@ export default {
     removeMeasures(index) {
       let tempArray = this.measuresQue.slice(0);
       tempArray.splice(index, 1);
-      this.$store.dispatch('updateMeasuresQue', tempArray);
+      this.$store.dispatch("updateMeasuresQue", tempArray);
     },
     removeDimensions(index) {
       let tempArray = this.dimensionsQue.slice(0);
       tempArray.splice(index, 1);
-      this.$store.dispatch('updateDimensionsQue', tempArray);
+      this.$store.dispatch("updateDimensionsQue", tempArray);
     },
     removeFilters(index) {
       let tempArray = this.filtersQue.slice(0);
       tempArray.splice(index, 1);
-      this.$store.dispatch('updateFiltersQue', tempArray);
+      this.$store.dispatch("updateFiltersQue", tempArray);
+    },    
+    toggleSettingMeasures(index) {
+      this.showSettingMeasures[index] = !this.showSettingMeasures[index];
+      this.showSettingMeasures = this.showSettingMeasures.slice(0);
+    },
+    toggleSettingDimensions(index) {
+      this.showSettingDemensions[index] = !this.showSettingDemensions[index];
+      this.showSettingDemensions = this.showSettingDemensions.slice(0);
+    },
+    toggleSettingFilters(index) {
+      this.showSettingFilters[index] = !this.showSettingFilters[index];
+      this.showSettingFilters = this.showSettingFilters.slice(0);
     }
   }
 };

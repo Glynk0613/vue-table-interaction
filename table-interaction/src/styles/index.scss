@@ -57,6 +57,7 @@
   .item-left {
     display: flex;
     cursor: pointer;
+    position: relative;
     .item-drop {
       font-size: 12px;
       padding: 2px 4px;
@@ -64,6 +65,21 @@
     .item-mode {
       font-size: 10px;
       padding: 4px;
+    }
+    .item-settings {
+      position: absolute;
+      left: 0px;
+      top: 24px;
+      .card {
+        width: 250px;
+        z-index: 2;
+        .card-body {
+          padding: 10px;
+          .card-title {
+            font-size: 14px;
+          }
+        }
+      }
     }
   }
 
