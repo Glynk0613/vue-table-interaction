@@ -49,10 +49,10 @@
                     :class="element ? 'item-content' : 'item-blank'"
                   >
                     <div v-if="element" class="item-left">
-                      <a class="item-drop" @click="toggleSettingMeasures(index)">
+                      <a class="item-drop" @click="toggleOptionMeasures(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
-                      <ItemSettingsPanel v-if="showSettingMeasures[index]"/>
+                      <ItemOptionPanel v-if="showOptionMeasures[index]"/>
                       <span class="item-mode">{{ measuresMode[element.mode].label }}</span>
                       <div class="item-model">
                         <span class="item-icon">#</span>
@@ -80,10 +80,10 @@
                     :class="element ? 'item-content' : 'item-blank'"
                   >
                     <div v-if="element" class="item-left">
-                      <a class="item-drop" @click="toggleSettingDimensions(index)">
+                      <a class="item-drop" @click="toggleOptionDimensions(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
-                      <ItemSettingsPanel v-if="showSettingDemensions[index]"/>
+                      <ItemOptionPanel v-if="showOptionDemensions[index]" itemType="dimensions" :itemIndex="index" @close="toggleOptionDimensions(index)"/>
                       <div class="item-model">
                         <span class="item-icon">
                           <i class="fa fa-font"></i>
@@ -122,10 +122,10 @@
                     :class="element ? 'item-content' : 'item-blank'"
                   >
                     <div v-if="element" class="item-left">
-                      <a class="item-drop" @click="toggleSettingFilters(index)">
+                      <a class="item-drop" @click="toggleOptionFilters(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
-                      <ItemSettingsPanel v-if="showSettingFilters[index]"/>
+                      <ItemOptionPanel v-if="showOptionFilters[index]"/>
                       <div class="item-model">
                         <span class="item-icon">
                           <i class="fa fa-font"></i>
@@ -155,7 +155,7 @@
 
 <script>
 import draggable from "vuedraggable";
-import ItemSettingsPanel from "./ItemSettingsPanel";
+import ItemOptionPanel from "./ItemOptionPanel";
 import {
   MeasuresMode,
   DimensionsMode,
@@ -166,30 +166,30 @@ export default {
   name: "ModelQueryPanel",
   components: {
     draggable,
-    ItemSettingsPanel
+    ItemOptionPanel
   },
   data() {
     return {
       measuresMode: MeasuresMode,
       dimensionsMode: DimensionsMode,
       filtersMode: FiltersMode,
-      showSettingMeasures: null,
-      showSettingDemensions: null,
-      showSettingFilters: null
+      showOptionMeasures: null,
+      showOptionDemensions: null,
+      showOptionFilters: null
     };
   },
   mounted: function () {
-    this.showSettingMeasures = [];
+    this.showOptionMeasures = [];
     this.measuresSrc.forEach((element, index) => {
-      this.showSettingMeasures[index] = false;
+      this.showOptionMeasures[index] = false;
     });
-    this.showSettingDemensions = [];
+    this.showOptionDemensions = [];
     this.dimensionsSrc.forEach((element, index) => {
-      this.showSettingDemensions[index] = false;
+      this.showOptionDemensions[index] = false;
     });
-    this.showSettingFilters = [];
+    this.showOptionFilters = [];
     this.dimensionsSrc.forEach((element, index) => {
-      this.showSettingFilters[index] = false;
+      this.showOptionFilters[index] = false;
     });
   },
   computed: {
@@ -301,17 +301,17 @@ export default {
       tempArray.splice(index, 1);
       this.$store.dispatch("updateFiltersQue", tempArray);
     },    
-    toggleSettingMeasures(index) {
-      this.showSettingMeasures[index] = !this.showSettingMeasures[index];
-      this.showSettingMeasures = this.showSettingMeasures.slice(0);
+    toggleOptionMeasures(index) {
+      this.showOptionMeasures[index] = !this.showOptionMeasures[index];
+      this.showOptionMeasures = this.showOptionMeasures.slice(0);
     },
-    toggleSettingDimensions(index) {
-      this.showSettingDemensions[index] = !this.showSettingDemensions[index];
-      this.showSettingDemensions = this.showSettingDemensions.slice(0);
+    toggleOptionDimensions(index) {
+      this.showOptionDemensions[index] = !this.showOptionDemensions[index];
+      this.showOptionDemensions = this.showOptionDemensions.slice(0);
     },
-    toggleSettingFilters(index) {
-      this.showSettingFilters[index] = !this.showSettingFilters[index];
-      this.showSettingFilters = this.showSettingFilters.slice(0);
+    toggleOptionFilters(index) {
+      this.showOptionFilters[index] = !this.showOptionFilters[index];
+      this.showOptionFilters = this.showOptionFilters.slice(0);
     }
   }
 };
