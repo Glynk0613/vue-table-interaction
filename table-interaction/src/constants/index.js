@@ -26,3 +26,9 @@ export const FiltersMode = [
     label: "is one of"
   }
 ];
+
+export const UPDATE_MEASURES_SRC = "UPDATE_MEASURES_SRC";
+export const UPDATE_DIMENSIONS_SRC = "UPDATE_DIMENSIONS_SRC";
+export const UPDATE_MEASURES_QUE = "UPDATE_MEASURES_QUE";
+export const UPDATE_DIMENSIONS_QUE = "UPDATE_DIMENSIONS_QUE";
+export const UPDATE_FILTERS_QUE = "UPDATE_FILTERS_QUE";
