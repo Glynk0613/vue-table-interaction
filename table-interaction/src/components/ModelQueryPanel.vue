@@ -267,25 +267,16 @@ export default {
     removeMeasures(index) {
       let tempArray = this.measuresQue.slice(0);
       tempArray.splice(index, 1);
-      if (!tempArray.length) {
-        tempArray = [null];
-      }
       this.$store.dispatch('updateMeasuresQue', tempArray);
     },
     removeDimensions(index) {
       let tempArray = this.dimensionsQue.slice(0);
       tempArray.splice(index, 1);
-      if (!tempArray.length) {
-        tempArray = [null];
-      }
       this.$store.dispatch('updateDimensionsQue', tempArray);
     },
     removeFilters(index) {
       let tempArray = this.filtersQue.slice(0);
       tempArray.splice(index, 1);
-      if (!tempArray.length) {
-        tempArray = [null];
-      }
       this.$store.dispatch('updateFiltersQue', tempArray);
     }
   }
