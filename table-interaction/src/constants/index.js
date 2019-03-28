@@ -27,6 +27,10 @@ export const FiltersMode = [
   }
 ];
 
+export const MEASURES = "measures";
+export const DIMENSIONTS = "dimensions";
+export const FILTERS = "filters";
+
 export const UPDATE_MEASURES_SRC = "UPDATE_MEASURES_SRC";
 export const UPDATE_DIMENSIONS_SRC = "UPDATE_DIMENSIONS_SRC";
 export const UPDATE_MEASURES_QUE = "UPDATE_MEASURES_QUE";

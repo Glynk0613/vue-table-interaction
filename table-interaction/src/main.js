@@ -10,6 +10,8 @@ import "./styles/index.scss";
 Vue.use(BootstrapVue);
 Vue.config.productionTip = false;
 
+window.$ = window.jQuery = require("jquery");
+
 new Vue({
   store,
   render: h => h(App)

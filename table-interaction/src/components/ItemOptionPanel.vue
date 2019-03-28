@@ -3,12 +3,28 @@
     <b-card>
       <b-card-body>
         <b-card-title>Test Task Data.Scenario</b-card-title>
-        <b-card-text v-if="itemType=='dimensions' && dMode!=null">
-          <b-dropdown id="down-left" :text="dimensionsMode[dMode].label" variant="light" class="m-2">
+        <b-card-text v-if="itemType==MEASURES && mMode!=null">
+          <b-dropdown id="down-measures" :text="measuresMode[mMode].label" variant="light" class="m-2">
+            <b-dropdown-item href="#" v-for="(element, index) in measuresMode" :key="element.id" @click="changeMeasuresMode(index)">
+              {{ element.label }}
+            </b-dropdown-item>
+          </b-dropdown>    
+        </b-card-text>
+
+        <b-card-text v-if="itemType==DIMENSIONTS && dMode!=null">
+          <b-dropdown id="down-dimensions" :text="dimensionsMode[dMode].label" variant="light" class="m-2">
             <b-dropdown-item href="#" v-for="(element, index) in dimensionsMode" :key="element.id" @click="changeDimensionsMode(index)">
               {{ element.label }}
             </b-dropdown-item>
           </b-dropdown>    
+        </b-card-text>
+        <b-card-text v-if="itemType==FILTERS && fMode!=null">
+          <b-dropdown id="down-filters" :text="filtersMode[fMode].label" variant="light" class="m-2">
+            <b-dropdown-item href="#" v-for="(element, index) in filtersMode" :key="element.id" @click="changeFiltersMode(index)">
+              {{ element.label }}
+            </b-dropdown-item>
+          </b-dropdown>
+          <input v-model="fParam"/>
         </b-card-text>
 
       </b-card-body>
@@ -24,7 +40,10 @@
 import {
   MeasuresMode,
   DimensionsMode,
-  FiltersMode
+  FiltersMode,
+  MEASURES,
+  DIMENSIONTS,
+  FILTERS,
 } from "../constants/index.js";
 
 export default {
@@ -35,30 +54,62 @@ export default {
       measuresMode: MeasuresMode,
       dimensionsMode: DimensionsMode,
       filtersMode: FiltersMode,
-      dMode: null
+      MEASURES: MEASURES,
+      DIMENSIONTS: DIMENSIONTS,
+      FILTERS: FILTERS,
+      mMode: null,
+      dMode: null,
+      fMode: null,
+      fParam: null
     };
   },
   computed: {
+    measuresQue () {
+      return this.$store.getters.getStateMeasuresQue;
+    },
     dimensionsQue () {
       return this.$store.getters.getStateDimensionsQue;
+    },
+    filtersQue () {
+      return this.$store.getters.getStateFiltersQue;
     }
   },
   mounted: function () {
-    if (this.itemIndex > -1) {
-      this.dMode = this.dimensionsQue[this.itemIndex].dMode
-    }
-    console.log(this.itemIndex, this.itemType, this.dMode);
+    switch(this.itemType) {
+      case MEASURES:
+        this.mMode = this.measuresQue[this.itemIndex].mode;
+        break;
+      case DIMENSIONTS:
+        this.dMode = this.dimensionsQue[this.itemIndex].dMode;
+        break;
+      case FILTERS:
+        this.fMode = this.filtersQue[this.itemIndex].fMode;
+        this.fParam = this.filtersQue[this.itemIndex].fParam;
+        break;
+    } 
   },
   methods: {
+    changeMeasuresMode(index) {
+       this.mMode = index;
+    },
     changeDimensionsMode(index) {
        this.dMode = index;
-      // this.$store.dispatch("updateDimensionsQue", value);
+    },
+    changeFiltersMode(index) {
+       this.fMode = index;
     },
     onButtonClick(set) {
       if (set) {
         switch(this.itemType) {
-          case 'dimensions':
+          case MEASURES:
+            this.measuresQue[this.itemIndex].mMode = this.mMode;
+            break;
+          case DIMENSIONTS:
             this.dimensionsQue[this.itemIndex].dMode = this.dMode;
+            break;
+          case FILTERS:
+            this.filtersQue[this.itemIndex].fMode = this.fMode;
+            this.filtersQue[this.itemIndex].fParam = this.fParam;
             break;
         }
       }

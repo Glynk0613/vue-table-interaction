@@ -19,7 +19,7 @@
         <div class="item-label">Dimensions</div>
         <draggable
           v-model="dimensionsSrc"
-          :group="{ name: 'dimensions', pull: 'clone', put: false}"
+          :group="{ name: dimensionsId, pull: 'clone', put: false}"
         >
           <transition-group>
             <div v-for="(element, index) in dimensionsSrc" :key="'sd'+index" class="item-model">
@@ -33,7 +33,7 @@
       </b-collapse>
     </div>
     <div class="panel-query">
-      <b-tabs card>
+      <b-tabs card v-if="showOptionMeasures">
         <b-tab title="Tab 1" active>
           <b-card-text>
             <div class="item-label">
@@ -52,7 +52,7 @@
                       <a class="item-drop" @click="toggleOptionMeasures(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
-                      <ItemOptionPanel v-if="showOptionMeasures[index]"/>
+                      <ItemOptionPanel v-if="showOptionMeasures[index]" :itemType="measuresId" :itemIndex="index" @close="toggleOptionMeasures(index)"/>
                       <span class="item-mode">{{ measuresMode[element.mode].label }}</span>
                       <div class="item-model">
                         <span class="item-icon">#</span>
@@ -72,7 +72,7 @@
               <b-button v-b-tooltip.hover title="Tooltip content2" class="btn-tooltip">?</b-button>
             </div>
             <div class="item-wrapper">
-              <draggable v-model="dimensionsQue" group="dimensions" @change="changeDimensions">
+              <draggable v-model="dimensionsQue" :group="dimensionsId" @change="changeDimensions">
                 <transition-group>
                   <div
                     v-for="(element, index) in dimensionsQue"
@@ -83,7 +83,7 @@
                       <a class="item-drop" @click="toggleOptionDimensions(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
-                      <ItemOptionPanel v-if="showOptionDemensions[index]" itemType="dimensions" :itemIndex="index" @close="toggleOptionDimensions(index)"/>
+                      <ItemOptionPanel v-if="showOptionDemensions[index]" :itemType="dimensionsId" :itemIndex="index" @close="toggleOptionDimensions(index)"/>
                       <div class="item-model">
                         <span class="item-icon">
                           <i class="fa fa-font"></i>
@@ -114,7 +114,7 @@
               <b-button v-b-tooltip.hover title="Tooltip content" class="btn-tooltip">?</b-button>
             </div>
             <div class="item-wrapper">
-              <draggable v-model="filtersQue" group="dimensions" @change="changeFilters">
+              <draggable v-model="filtersQue" :group="dimensionsId" @change="changeFilters">
                 <transition-group>
                   <div
                     v-for="(element, index) in filtersQue"
@@ -125,7 +125,7 @@
                       <a class="item-drop" @click="toggleOptionFilters(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
-                      <ItemOptionPanel v-if="showOptionFilters[index]"/>
+                      <ItemOptionPanel v-if="showOptionFilters[index]" :itemType="filtersId" :itemIndex="index" @close="toggleOptionFilters(index)"/>
                       <div class="item-model">
                         <span class="item-icon">
                           <i class="fa fa-font"></i>
@@ -159,7 +159,10 @@ import ItemOptionPanel from "./ItemOptionPanel";
 import {
   MeasuresMode,
   DimensionsMode,
-  FiltersMode
+  FiltersMode,
+  MEASURES,
+  DIMENSIONTS,
+  FILTERS
 } from "../constants/index.js";
 
 export default {
@@ -173,24 +176,25 @@ export default {
       measuresMode: MeasuresMode,
       dimensionsMode: DimensionsMode,
       filtersMode: FiltersMode,
+      measuresId: MEASURES,
+      dimensionsId: DIMENSIONTS,
+      filtersId: FILTERS,
       showOptionMeasures: null,
       showOptionDemensions: null,
       showOptionFilters: null
     };
   },
   mounted: function () {
-    this.showOptionMeasures = [];
-    this.measuresSrc.forEach((element, index) => {
-      this.showOptionMeasures[index] = false;
-    });
-    this.showOptionDemensions = [];
-    this.dimensionsSrc.forEach((element, index) => {
-      this.showOptionDemensions[index] = false;
-    });
-    this.showOptionFilters = [];
-    this.dimensionsSrc.forEach((element, index) => {
-      this.showOptionFilters[index] = false;
-    });
+    const vm = this;
+    $.ajax({
+      type: "GET",
+      url: "test.csv",
+      dataType: "text",
+      success: function(data) 
+        {
+          vm.processData(data);
+        }
+      });
   },
   computed: {
     measuresSrc: {
@@ -312,6 +316,40 @@ export default {
     toggleOptionFilters(index) {
       this.showOptionFilters[index] = !this.showOptionFilters[index];
       this.showOptionFilters = this.showOptionFilters.slice(0);
+    },
+    processData(data) {
+      console.log(data);
+
+
+      let lines = data.split(/\r\n|\n/);
+      let headings = lines[0].split(',');
+
+      let dimensionSrcFromCSV = [];
+      headings.forEach((element) => {
+        if (element !== "Measure" && element !== "Value") {
+          dimensionSrcFromCSV.push ({
+            id: element,
+            label: element,
+            dMode: 1,
+            fMode: 0,
+            fParam: null
+          });
+        }
+      });
+      this.$store.dispatch("updateDimensionsSrc", dimensionSrcFromCSV);
+
+      this.showOptionMeasures = [];
+      this.measuresSrc.forEach((element, index) => {
+        this.showOptionMeasures[index] = false;
+      });
+      this.showOptionDemensions = [];
+      this.dimensionsSrc.forEach((element, index) => {
+        this.showOptionDemensions[index] = false;
+      });
+      this.showOptionFilters = [];
+      this.dimensionsSrc.forEach((element, index) => {
+        this.showOptionFilters[index] = false;
+      });
     }
   }
 };
