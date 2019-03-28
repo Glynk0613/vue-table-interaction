@@ -13,11 +13,11 @@ let updateMeasuresQue = ({ commit }, payload) => {
 };
 
 let updateDimensionsQue = ({ commit }, payload) => {
-  commit(Constants.updateDimensionsQue, payload);
+  commit(Constants.UPDATE_DIMENSIONS_QUE, payload);
 };
 
 let updateFiltersQue = ({ commit }, payload) => {
-  commit(Constants.updateFiltersQue, payload);
+  commit(Constants.UPDATE_FILTERS_QUE, payload);
 };
 
 export { updateMeasuresSrc };

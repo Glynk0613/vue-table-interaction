@@ -165,24 +165,52 @@ export default {
   },
   data() {
     return {
-      measuresSrc: [
-        { id: "price", label: "Price", mode: 0 },
-        { id: "row_id", label: "Row Id", mode: 0 },
-        { id: "units", label: "Units", mode: 0 }
-      ],
-      dimensionsSrc: [
-        { id: "Model", label: "Model", dMode: 1, fMode: 0, fParam: null },
-        { id: "Period", label: "Period", dMode: 1, fMode: 0, fParam: null },
-        { id: "Region", label: "Region", dMode: 1, fMode: 0, fParam: null },
-        { id: "Scenario", label: "Scenario", dMode: 1, fMode: 0, fParam: null }
-      ],
-      measuresQue: [null],
-      dimensionsQue: [null],
-      filtersQue: [null],
       measuresMode: MeasuresMode,
       dimensionsMode: DimensionsMode,
       filtersMode: FiltersMode
     };
+  },
+  computed: {
+    measuresSrc: {
+      get() {
+        return this.$store.getters.getStateMeasuresSrc;
+      },
+      set(value) {
+        this.$store.dispatch('updateMeasuresSrc', value);
+      }
+    },
+    dimensionsSrc: {
+      get() {
+        return this.$store.getters.getStateDimensionsSrc;
+      },
+      set(value) {
+        this.$store.dispatch('updateDimensionsSrc', value);
+      }
+    },
+    measuresQue: {
+      get() {
+        return this.$store.getters.getStateMeasuresQue;
+      },
+      set(value) {
+        this.$store.dispatch('updateMeasuresQue', value);
+      }
+    },
+    dimensionsQue: {
+      get() {
+        return this.$store.getters.getStateDimensionsQue;
+      },
+      set(value) {
+        this.$store.dispatch('updateDimensionsQue', value);
+      }
+    },
+    filtersQue: {
+      get() {
+        return this.$store.getters.getStateFiltersQue;
+      },
+      set(value) {
+        this.$store.dispatch('updateFiltersQue', value);
+      }
+    }
   },
   methods: {
     changeMeasures(e) {
@@ -237,22 +265,28 @@ export default {
       }
     },
     removeMeasures(index) {
-      this.measuresQue.splice(index, 1);
-      if (!this.measuresQue.length) {
-        this.measuresQue = [null];
+      let tempArray = this.measuresQue.slice(0);
+      tempArray.splice(index, 1);
+      if (!tempArray.length) {
+        tempArray = [null];
       }
+      this.$store.dispatch('updateMeasuresQue', tempArray);
     },
     removeDimensions(index) {
-      this.dimensionsQue.splice(index, 1);
-      if (!this.dimensionsQue.length) {
-        this.dimensionsQue = [null];
+      let tempArray = this.dimensionsQue.slice(0);
+      tempArray.splice(index, 1);
+      if (!tempArray.length) {
+        tempArray = [null];
       }
+      this.$store.dispatch('updateDimensionsQue', tempArray);
     },
     removeFilters(index) {
-      this.filtersQue.splice(index, 1);
-      if (!this.filtersQue.length) {
-        this.filtersQue = [null];
+      let tempArray = this.filtersQue.slice(0);
+      tempArray.splice(index, 1);
+      if (!tempArray.length) {
+        tempArray = [null];
       }
+      this.$store.dispatch('updateFiltersQue', tempArray);
     }
   }
 };

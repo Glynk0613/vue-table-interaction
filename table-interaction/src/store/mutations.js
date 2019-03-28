@@ -4,7 +4,7 @@ export default {
   [Constants.UPDATE_MEASURES_SRC](state, value) {
     state.measuresSrc = value;
   },
-  [Constants.UPDATE_DIMENSIONS_QUE](state, value) {
+  [Constants.UPDATE_DIMENSIONS_SRC](state, value) {
     state.dimensionsSrc = value;
   },
   [Constants.UPDATE_MEASURES_QUE](state, value) {
