@@ -23,7 +23,9 @@
         >
           <transition-group>
             <div v-for="(element, index) in dimensionsSrc" :key="'sd'+index" class="item-model">
-              <span><i class="fa fa-font"></i></span>
+              <span class="item-icon">
+                <i class="fa fa-font"></i>
+              </span>
               <span>{{ element.id }}</span>
             </div>
           </transition-group>
@@ -41,10 +43,20 @@
             <div class="item-wrapper">
               <draggable v-model="measuresQue" group="measures" @change="changeMeasures">
                 <transition-group>
-                  <div v-for="(element, index) in measuresQue" :key="'qm'+index" :class="element ? 'item-content' : 'item-blank'">
-                    <div v-if="element" class="item-model">
-                      <span class="item-icon">#</span>
-                      <span>{{ element.id }}</span>
+                  <div
+                    v-for="(element, index) in measuresQue"
+                    :key="'qm'+index"
+                    :class="element ? 'item-content' : 'item-blank'"
+                  >
+                    <div v-if="element" class="item-left">
+                      <a class="item-drop">
+                        <i class="fa fa-caret-down"></i>
+                      </a>
+                      <span class="item-mode">{{ measuresMode[element.mode].label }}</span>
+                      <div class="item-model">
+                        <span class="item-icon">#</span>
+                        <span>{{ element.id }}</span>
+                      </div>
                     </div>
                     <a v-if="element" class="item-remove" @click="removeMeasures(index)">
                       <i class="fa fa-times-circle"></i>
@@ -61,10 +73,31 @@
             <div class="item-wrapper">
               <draggable v-model="dimensionsQue" group="dimensions" @change="changeDimensions">
                 <transition-group>
-                  <div v-for="(element, index) in dimensionsQue" :key="'qd'+index" :class="element ? 'item-content' : 'item-blank'">
-                    <div v-if="element" class="item-model">
-                      <span><i class="fa fa-font"></i></span>
-                      <span>{{ element.id }}</span>
+                  <div
+                    v-for="(element, index) in dimensionsQue"
+                    :key="'qd'+index"
+                    :class="element ? 'item-content' : 'item-blank'"
+                  >
+                    <div v-if="element" class="item-left">
+                      <a class="item-drop">
+                        <i class="fa fa-caret-down"></i>
+                      </a>
+                      <div class="item-model">
+                        <span class="item-icon">
+                          <i class="fa fa-font"></i>
+                        </span>
+                        <span>{{ element.id }}</span>
+                      </div>
+                      <div class="item-mode">
+                        <i
+                          v-if="dimensionsMode[element.dMode].id=='asc'"
+                          class="fa fa-sort-numeric-asc"
+                        ></i>
+                        <i
+                          v-if="dimensionsMode[element.dMode].id=='desc'"
+                          class="fa fa-sort-numeric-desc"
+                        ></i>
+                      </div>
                     </div>
                     <a v-if="element" class="item-remove" @click="removeDimensions(index)">
                       <i class="fa fa-times-circle"></i>
@@ -81,10 +114,24 @@
             <div class="item-wrapper">
               <draggable v-model="filtersQue" group="dimensions" @change="changeFilters">
                 <transition-group>
-                  <div v-for="(element, index) in filtersQue" :key="'qf'+index" :class="element ? 'item-content' : 'item-blank'">
-                    <div v-if="element" class="item-model">
-                      <span><i class="fa fa-font"></i></span>
-                      <span>{{ element.id }}</span>
+                  <div
+                    v-for="(element, index) in filtersQue"
+                    :key="'qf'+index"
+                    :class="element ? 'item-content' : 'item-blank'"
+                  >
+                    <div v-if="element" class="item-left">
+                      <a class="item-drop">
+                        <i class="fa fa-caret-down"></i>
+                      </a>
+                      <div class="item-model">
+                        <span class="item-icon">
+                          <i class="fa fa-font"></i>
+                        </span>
+                        <span>{{ element.id }}</span>
+                      </div>
+                      <div
+                        class="item-mode"
+                      >{{ filtersMode[element.fMode].label }}&nbsp;{{ element.fParam }}</div>
                     </div>
                     <a v-if="element" class="item-remove" @click="removeFilters(index)">
                       <i class="fa fa-times-circle"></i>
@@ -105,6 +152,11 @@
 
 <script>
 import draggable from "vuedraggable";
+import {
+  MeasuresMode,
+  DimensionsMode,
+  FiltersMode
+} from "../constants/index.js";
 
 export default {
   name: "ModelQueryPanel",
@@ -114,19 +166,22 @@ export default {
   data() {
     return {
       measuresSrc: [
-        { id: "price", label: "Price" },
-        { id: "row_id", label: "Row Id" },
-        { id: "units", label: "Units" }
+        { id: "price", label: "Price", mode: 0 },
+        { id: "row_id", label: "Row Id", mode: 0 },
+        { id: "units", label: "Units", mode: 0 }
       ],
       dimensionsSrc: [
-        { id: "Model", label: "Model" },
-        { id: "Period", label: "Period" },
-        { id: "Region", label: "Region" },
-        { id: "Scenario", label: "Scenario" }
+        { id: "Model", label: "Model", dMode: 1, fMode: 0, fParam: null },
+        { id: "Period", label: "Period", dMode: 1, fMode: 0, fParam: null },
+        { id: "Region", label: "Region", dMode: 1, fMode: 0, fParam: null },
+        { id: "Scenario", label: "Scenario", dMode: 1, fMode: 0, fParam: null }
       ],
       measuresQue: [null],
       dimensionsQue: [null],
-      filtersQue: [null]
+      filtersQue: [null],
+      measuresMode: MeasuresMode,
+      dimensionsMode: DimensionsMode,
+      filtersMode: FiltersMode
     };
   },
   methods: {

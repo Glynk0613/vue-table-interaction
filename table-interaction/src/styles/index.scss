@@ -46,9 +46,7 @@
     display: none;
     font-size: 12px;
     padding: 2px 5px;
-    &:hover {
-      cursor: pointer;
-    }
+    cursor: pointer;
   }
   &:hover {
     .item-remove {
@@ -56,13 +54,30 @@
     }
   }
 
-}  
+  .item-left {
+    display: flex;
+    cursor: pointer;
+    .item-drop {
+      font-size: 12px;
+      padding: 2px 4px;
+    }
+    .item-mode {
+      font-size: 10px;
+      padding: 4px;
+    }
+  }
+
+} 
 .item-model {
   background-color: white;
   font-size: 10px;
   margin: 3px;
   padding: 1px 5px;
   border-radius: 2px;
+  .item-icon {
+    margin-right: 5px;
+    color: gray;
+  }
 }
 .item-blank {
   min-height: 30px;
