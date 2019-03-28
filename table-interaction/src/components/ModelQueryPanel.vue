@@ -34,7 +34,7 @@
     </div>
     <div class="panel-query">
       <b-tabs card v-if="showOptionMeasures">
-        <b-tab title="Tab 1" active>
+        <b-tab title="Interactive Mode" active>
           <b-card-text>
             <div class="item-label">
               Meaures
@@ -52,7 +52,12 @@
                       <a class="item-drop" @click="toggleOptionMeasures(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
-                      <ItemOptionPanel v-if="showOptionMeasures[index]" :itemType="measuresId" :itemIndex="index" @close="toggleOptionMeasures(index)"/>
+                      <ItemOptionPanel
+                        v-if="showOptionMeasures[index]"
+                        :itemType="measuresId"
+                        :itemIndex="index"
+                        @close="toggleOptionMeasures(index)"
+                      />
                       <span class="item-mode">{{ measuresMode[element.mode].label }}</span>
                       <div class="item-model">
                         <span class="item-icon">#</span>
@@ -83,7 +88,12 @@
                       <a class="item-drop" @click="toggleOptionDimensions(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
-                      <ItemOptionPanel v-if="showOptionDemensions[index]" :itemType="dimensionsId" :itemIndex="index" @close="toggleOptionDimensions(index)"/>
+                      <ItemOptionPanel
+                        v-if="showOptionDemensions[index]"
+                        :itemType="dimensionsId"
+                        :itemIndex="index"
+                        @close="toggleOptionDimensions(index)"
+                      />
                       <div class="item-model">
                         <span class="item-icon">
                           <i class="fa fa-font"></i>
@@ -125,7 +135,12 @@
                       <a class="item-drop" @click="toggleOptionFilters(index)">
                         <i class="fa fa-caret-down"></i>
                       </a>
-                      <ItemOptionPanel v-if="showOptionFilters[index]" :itemType="filtersId" :itemIndex="index" @close="toggleOptionFilters(index)"/>
+                      <ItemOptionPanel
+                        v-if="showOptionFilters[index]"
+                        :itemType="filtersId"
+                        :itemIndex="index"
+                        @close="toggleOptionFilters(index)"
+                      />
                       <div class="item-model">
                         <span class="item-icon">
                           <i class="fa fa-font"></i>
@@ -145,10 +160,11 @@
             </div>
           </b-card-text>
         </b-tab>
-        <b-tab title="Tab 2">
+        <b-tab title="SQL Mode">
           <b-card-text>Tab Contents 2</b-card-text>
         </b-tab>
       </b-tabs>
+      <button class="button-query" @click="excute">Run Query</button>
     </div>
   </div>
 </template>
@@ -162,7 +178,8 @@ import {
   FiltersMode,
   MEASURES,
   DIMENSIONTS,
-  FILTERS
+  FILTERS,
+  UPDATE_RENDER_STATE
 } from "../constants/index.js";
 
 export default {
@@ -181,20 +198,20 @@ export default {
       filtersId: FILTERS,
       showOptionMeasures: null,
       showOptionDemensions: null,
-      showOptionFilters: null
+      showOptionFilters: null,
+      dataSet: null
     };
   },
-  mounted: function () {
+  mounted: function() {
     const vm = this;
     $.ajax({
       type: "GET",
       url: "test.csv",
       dataType: "text",
-      success: function(data) 
-        {
-          vm.processData(data);
-        }
-      });
+      success: function(data) {
+        vm.processData(data);
+      }
+    });
   },
   computed: {
     measuresSrc: {
@@ -304,7 +321,7 @@ export default {
       let tempArray = this.filtersQue.slice(0);
       tempArray.splice(index, 1);
       this.$store.dispatch("updateFiltersQue", tempArray);
-    },    
+    },
     toggleOptionMeasures(index) {
       this.showOptionMeasures[index] = !this.showOptionMeasures[index];
       this.showOptionMeasures = this.showOptionMeasures.slice(0);
@@ -318,16 +335,13 @@ export default {
       this.showOptionFilters = this.showOptionFilters.slice(0);
     },
     processData(data) {
-      console.log(data);
-
-
+      this.dataSet = [];
       let lines = data.split(/\r\n|\n/);
-      let headings = lines[0].split(',');
-
+      let headings = lines[0].split(",");
       let dimensionSrcFromCSV = [];
-      headings.forEach((element) => {
+      headings.forEach(element => {
         if (element !== "Measure" && element !== "Value") {
-          dimensionSrcFromCSV.push ({
+          dimensionSrcFromCSV.push({
             id: element,
             label: element,
             dMode: 1,
@@ -337,6 +351,16 @@ export default {
         }
       });
       this.$store.dispatch("updateDimensionsSrc", dimensionSrcFromCSV);
+
+      for (let i = 1; i < lines.length; i++) {
+        let values = lines[i].split(',');
+        let row = {};
+        headings.forEach((head, index) => {
+          row[head] = values [index];
+        });
+        this.dataSet.push(row);
+      }
+      console.log(this.dataSet);
 
       this.showOptionMeasures = [];
       this.measuresSrc.forEach((element, index) => {
@@ -350,6 +374,33 @@ export default {
       this.dimensionsSrc.forEach((element, index) => {
         this.showOptionFilters[index] = false;
       });
+    },
+    excute() {
+      let resultSet = [];
+      this.dataSet.forEach(row => {
+        let add = false
+        if (this.filtersQue[0] === null) {
+          add = true;
+        } else {
+          this.filtersQue.forEach(filter => {
+            if (filter.fMode === 0 && row[filter.id] === filter.fParam) { // is one of
+              add = true;
+            }
+          });
+        }
+        if (add) {
+          resultSet.push(row);
+        }
+      });
+      this.dimensionsQue.forEach(element => {
+        if (!element) return;
+        if (!element.dMode) return;
+        resultSet.sort((a, b) => {
+          return element.dMode === 1 ? a[element.id] - b[element.id] : b[element.id] - a[element.id];
+        });
+      });
+
+      this.$store.commit(UPDATE_RENDER_STATE, resultSet);
     }
   }
 };

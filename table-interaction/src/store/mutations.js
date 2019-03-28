@@ -30,5 +30,8 @@ export default {
       value = [null];
     }
     state.filtersQue = value;
+  },
+  [Constants.UPDATE_RENDER_STATE](state, value) {
+    state.resultSet = value;
   }
 };
