@@ -4,6 +4,17 @@
       <div class="col-sm-12">
         <v-chart v-if="option && resultSet" :options="option"/>
       </div>
+      <div class="col-sm-12">
+        <button class="btn btn-light btn-sm mr-1" @click="changeChartType('bar')">
+          <i class="fa fa-bar-chart"></i>
+        </button>
+        <button class="btn btn-light btn-sm mr-1" @click="changeChartType('line')">
+          <i class="fa fa-line-chart"></i>
+        </button>
+        <button class="btn btn-light btn-sm mr-1" @click="changeChartType(null)">
+          <i class="fa fa-area-chart"></i>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -26,8 +37,7 @@ export default {
     }
   },
   watch: {
-    resultSet: function () {
-      console.log(this.resultSet)
+    resultSet: function() {
       if (this.resultSet) {
         const items = 24;
         this.option = {
@@ -67,7 +77,6 @@ export default {
           legendData.push(element.id);
         });
         this.option.legend.data = legendData;
-        console.log(legendData, 'legendData')
 
         const xAxisId = this.dimensionsQue[0].id;
         let xAxisData = [];
@@ -77,16 +86,14 @@ export default {
           }
         }
         this.option.xAxis[0].data = xAxisData;
-        console.log(xAxisData, 'xAxis')
 
         let yAxis = [];
         let series = [];
         legendData.forEach((legend, index) => {
-
           yAxis.push({
             type: "value",
             name: legend,
-            position: index? "right" : "left",
+            position: index ? "right" : "left",
             axisLine: {
               lineStyle: {
                 color: this.colors[index]
@@ -99,9 +106,9 @@ export default {
           series.push({
             name: legend,
             yAxisIndex: index,
-            type: "line",
+            type: index ? "line" : "bar",
             data: []
-          },)
+          });
           for (let i = 0; i < items && i < this.resultSet.length; i++) {
             if (this.resultSet[i].Measure === legend) {
               series[series.length - 1].data.push(this.resultSet[i].Value);
@@ -118,6 +125,19 @@ export default {
       colors: ["#5793f3", "#d14a61", "#675bba"],
       option: null
     };
+  },
+  methods: {
+    changeChartType(chartType) {
+      if (this.option) {
+        this.option.series.forEach((element, index) => {
+          if (chartType) {
+            element.type = chartType;
+          } else {
+            element.type = index ? "line" : "bar";
+          }
+        });
+      }
+    }
   }
 };
 </script>

@@ -390,20 +390,7 @@ export default {
     excute() {
       let resultSet = [];
       this.dataSet.forEach(row => {
-        let add = false;
-        if (this.filtersQue[0] === null) {
-          add = true;
-        } else {
-          this.filtersQue.forEach(filter => {
-            if (filter.fMode === 0 && row[filter.id] === filter.fParam) {
-              // is one of
-              add = true;
-            }
-          });
-        }
-        if (add) {
-          resultSet.push(row);
-        }
+        resultSet.push(row);
       });
       this.dimensionsQue.forEach(element => {
         if (!element) return;
