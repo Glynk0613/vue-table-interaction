@@ -6,18 +6,28 @@
         <span class="ml-2">Model</span>
       </div>
       <div class="panel-content">
-        <input type="text" class="search-box" placeholder="Enter your name"/>
-        <div v-b-toggle.collapse_left class="item-root mt-2" @click="showCollapse = !showCollapse">
+        <input type="text" class="search-box" placeholder="Enter your name" />
+        <div
+          v-b-toggle.collapse_left
+          class="item-root mt-2"
+          @click="showCollapse = !showCollapse"
+        >
           <i v-if="showCollapse" class="fa fa-angle-down mr-1"></i>
           <i v-else class="fa fa-angle-right mr-1"></i>
-
           <span>Test Task Data</span>
         </div>
         <b-collapse id="collapse_left" class="mt-1">
           <div class="item-label ml-2">Meaures</div>
-          <draggable v-model="measuresSrc" :group="{ name: 'measures', pull: 'clone', put: false}">
+          <draggable
+            v-model="measuresSrc"
+            :group="{ name: 'measures', pull: 'clone', put: false }"
+          >
             <transition-group>
-              <div v-for="(element, index) in measuresSrc" :key="'sm'+index" class="item-model">
+              <div
+                v-for="(element, index) in measuresSrc"
+                :key="'sm' + index"
+                class="item-model"
+              >
                 <span class="item-icon">#</span>
                 <span>{{ element.id }}</span>
               </div>
@@ -26,10 +36,14 @@
           <div class="item-label ml-2">Dimensions</div>
           <draggable
             v-model="dimensionsSrc"
-            :group="{ name: dimensionsId, pull: 'clone', put: false}"
+            :group="{ name: dimensionsId, pull: 'clone', put: false }"
           >
             <transition-group>
-              <div v-for="(element, index) in dimensionsSrc" :key="'sd'+index" class="item-model">
+              <div
+                v-for="(element, index) in dimensionsSrc"
+                :key="'sd' + index"
+                class="item-model"
+              >
                 <span class="item-icon">
                   <i class="fa fa-font"></i>
                 </span>
@@ -46,14 +60,24 @@
           <b-card-text>
             <div class="item-label">
               Meaures
-              <b-button v-b-tooltip.hover title="Tooltip content2" class="btn-tooltip">?</b-button>
+              <b-button
+                v-b-tooltip.hover
+                title="Tooltip content2"
+                class="btn-tooltip"
+              >
+                ?
+              </b-button>
             </div>
             <div class="item-wrapper">
-              <draggable v-model="measuresQue" group="measures" @change="changeMeasures">
+              <draggable
+                v-model="measuresQue"
+                group="measures"
+                @change="changeMeasures"
+              >
                 <transition-group>
                   <div
                     v-for="(element, index) in measuresQue"
-                    :key="'qm'+index"
+                    :key="'qm' + index"
                     :class="element ? 'item-content' : 'item-blank'"
                   >
                     <div v-if="element" class="item-left">
@@ -66,13 +90,19 @@
                         :itemIndex="index"
                         @close="toggleOptionMeasures(index)"
                       />
-                      <span class="item-mode">{{ measuresMode[element.mode].label }}</span>
+                      <span class="item-mode">
+                        {{ measuresMode[element.mode].label }}
+                      </span>
                       <div class="item-model">
                         <span class="item-icon">#</span>
                         <span>{{ element.id }}</span>
                       </div>
                     </div>
-                    <a v-if="element" class="item-remove" @click="removeMeasures(index)">
+                    <a
+                      v-if="element"
+                      class="item-remove"
+                      @click="removeMeasures(index)"
+                    >
                       <i class="fa fa-times-circle"></i>
                     </a>
                   </div>
@@ -82,18 +112,31 @@
 
             <div class="item-label mt-2">
               Dimensions
-              <b-button v-b-tooltip.hover title="Tooltip content2" class="btn-tooltip">?</b-button>
+              <b-button
+                v-b-tooltip.hover
+                title="Tooltip content2"
+                class="btn-tooltip"
+              >
+                ?
+              </b-button>
             </div>
             <div class="item-wrapper">
-              <draggable v-model="dimensionsQue" :group="dimensionsId" @change="changeDimensions">
+              <draggable
+                v-model="dimensionsQue"
+                :group="dimensionsId"
+                @change="changeDimensions"
+              >
                 <transition-group>
                   <div
                     v-for="(element, index) in dimensionsQue"
-                    :key="'qd'+index"
+                    :key="'qd' + index"
                     :class="element ? 'item-content' : 'item-blank'"
                   >
                     <div v-if="element" class="item-left">
-                      <a class="item-drop" @click="toggleOptionDimensions(index)">
+                      <a
+                        class="item-drop"
+                        @click="toggleOptionDimensions(index)"
+                      >
                         <i class="fa fa-caret-down"></i>
                       </a>
                       <ItemOptionPanel
@@ -110,16 +153,20 @@
                       </div>
                       <div class="item-mode">
                         <i
-                          v-if="dimensionsMode[element.dMode].id=='asc'"
+                          v-if="dimensionsMode[element.dMode].id == 'asc'"
                           class="fa fa-sort-numeric-asc"
                         ></i>
                         <i
-                          v-if="dimensionsMode[element.dMode].id=='desc'"
+                          v-if="dimensionsMode[element.dMode].id == 'desc'"
                           class="fa fa-sort-numeric-desc"
                         ></i>
                       </div>
                     </div>
-                    <a v-if="element" class="item-remove" @click="removeDimensions(index)">
+                    <a
+                      v-if="element"
+                      class="item-remove"
+                      @click="removeDimensions(index)"
+                    >
                       <i class="fa fa-times-circle"></i>
                     </a>
                   </div>
@@ -129,14 +176,24 @@
 
             <div class="item-label mt-2">
               Filters
-              <b-button v-b-tooltip.hover title="Tooltip content" class="btn-tooltip">?</b-button>
+              <b-button
+                v-b-tooltip.hover
+                title="Tooltip content"
+                class="btn-tooltip"
+              >
+                ?
+              </b-button>
             </div>
             <div class="item-wrapper">
-              <draggable v-model="filtersQue" :group="dimensionsId" @change="changeFilters">
+              <draggable
+                v-model="filtersQue"
+                :group="dimensionsId"
+                @change="changeFilters"
+              >
                 <transition-group>
                   <div
                     v-for="(element, index) in filtersQue"
-                    :key="'qf'+index"
+                    :key="'qf' + index"
                     :class="element ? 'item-content' : 'item-blank'"
                   >
                     <div v-if="element" class="item-left">
@@ -155,11 +212,19 @@
                         </span>
                         <span>{{ element.id }}</span>
                       </div>
-                      <div
-                        class="item-mode"
-                      >{{ filtersMode[element.fMode].label }}&nbsp;{{ element.fParam }}</div>
+                      <div class="item-mode">
+                        {{
+                          filtersMode[element.fMode].label +
+                            " " +
+                            element.fParam
+                        }}
+                      </div>
                     </div>
-                    <a v-if="element" class="item-remove" @click="removeFilters(index)">
+                    <a
+                      v-if="element"
+                      class="item-remove"
+                      @click="removeFilters(index)"
+                    >
                       <i class="fa fa-times-circle"></i>
                     </a>
                   </div>
@@ -168,15 +233,15 @@
             </div>
           </b-card-text>
           <div class="btn-wrapper">
-            <button class="btn-query btn btn-primary btn-sm" @click="excute">Run Query</button>
+            <button class="btn-query btn btn-primary btn-sm" @click="excute">
+              Run Query
+            </button>
           </div>
-
         </b-tab>
         <b-tab title="SQL Mode">
           <b-card-text>Tab Contents 2</b-card-text>
         </b-tab>
       </b-tabs>
-      
     </div>
   </div>
 </template>

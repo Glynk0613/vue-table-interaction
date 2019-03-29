@@ -2,16 +2,25 @@
   <div class="panel content-panel">
     <div class="row">
       <div class="col-sm-12">
-        <v-chart v-if="option && resultSet" :options="option"/>
+        <v-chart v-if="option && resultSet" :options="option" />
       </div>
       <div class="col-sm-12">
-        <button class="btn btn-light btn-sm mr-1" @click="changeChartType('bar')">
+        <button
+          class="btn btn-light btn-sm mr-1"
+          @click="changeChartType('bar')"
+        >
           <i class="fa fa-bar-chart"></i>
         </button>
-        <button class="btn btn-light btn-sm mr-1" @click="changeChartType('line')">
+        <button
+          class="btn btn-light btn-sm mr-1"
+          @click="changeChartType('line')"
+        >
           <i class="fa fa-line-chart"></i>
         </button>
-        <button class="btn btn-light btn-sm mr-1" @click="changeChartType(null)">
+        <button
+          class="btn btn-light btn-sm mr-1"
+          @click="changeChartType(null)"
+        >
           <i class="fa fa-area-chart"></i>
         </button>
       </div>

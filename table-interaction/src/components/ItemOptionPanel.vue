@@ -2,35 +2,73 @@
   <div class="item-option">
     <b-card>
       <b-card-body>
-        <b-card-title>Test Task Data.{{title}}</b-card-title>
-        <b-card-text v-if="itemType==MEASURES && mMode!=null">
-          <b-dropdown id="down-measures" :text="measuresMode[mMode].label" variant="light" >
-            <b-dropdown-item href="#" v-for="(element, index) in measuresMode" :key="element.id" @click="changeMeasuresMode(index)">
-              {{ element.label }}
-            </b-dropdown-item>
-          </b-dropdown>    
-        </b-card-text>
-
-        <b-card-text v-if="itemType==DIMENSIONTS && dMode!=null">
-          <b-dropdown id="down-dimensions" :text="dimensionsMode[dMode].label" variant="light" >
-            <b-dropdown-item href="#" v-for="(element, index) in dimensionsMode" :key="element.id" @click="changeDimensionsMode(index)">
-              {{ element.label }}
-            </b-dropdown-item>
-          </b-dropdown>    
-        </b-card-text>
-        <b-card-text v-if="itemType==FILTERS && fMode!=null">
-          <b-dropdown id="down-filters" :text="filtersMode[fMode].label" variant="light" >
-            <b-dropdown-item href="#" v-for="(element, index) in filtersMode" :key="element.id" @click="changeFiltersMode(index)">
+        <b-card-title>Test Task Data.{{ title }}</b-card-title>
+        <b-card-text v-if="itemType == MEASURES && mMode != null">
+          <b-dropdown
+            id="down-measures"
+            :text="measuresMode[mMode].label"
+            variant="light"
+          >
+            <b-dropdown-item
+              href="#"
+              v-for="(element, index) in measuresMode"
+              :key="element.id"
+              @click="changeMeasuresMode(index)"
+            >
               {{ element.label }}
             </b-dropdown-item>
           </b-dropdown>
-          <input v-model="fParam"/>
         </b-card-text>
 
+        <b-card-text v-if="itemType == DIMENSIONTS && dMode != null">
+          <b-dropdown
+            id="down-dimensions"
+            :text="dimensionsMode[dMode].label"
+            variant="light"
+          >
+            <b-dropdown-item
+              href="#"
+              v-for="(element, index) in dimensionsMode"
+              :key="element.id"
+              @click="changeDimensionsMode(index)"
+            >
+              {{ element.label }}
+            </b-dropdown-item>
+          </b-dropdown>
+        </b-card-text>
+        <b-card-text v-if="itemType == FILTERS && fMode != null">
+          <b-dropdown
+            id="down-filters"
+            :text="filtersMode[fMode].label"
+            variant="light"
+          >
+            <b-dropdown-item
+              href="#"
+              v-for="(element, index) in filtersMode"
+              :key="element.id"
+              @click="changeFiltersMode(index)"
+            >
+              {{ element.label }}
+            </b-dropdown-item>
+          </b-dropdown>
+          <input v-model="fParam" />
+        </b-card-text>
       </b-card-body>
       <b-card-body class="btn-wrapper">
-        <button href="#" @click="onButtonClick(true)" class="btn btn-primary mr-2 btn-sm">Ok</button>
-        <button href="#" @click="onButtonClick(false)" class="btn btn-light btn-sm">Cancel</button>
+        <button
+          href="#"
+          @click="onButtonClick(true)"
+          class="btn btn-primary mr-2 btn-sm"
+        >
+          Ok
+        </button>
+        <button
+          href="#"
+          @click="onButtonClick(false)"
+          class="btn btn-light btn-sm"
+        >
+          Cancel
+        </button>
       </b-card-body>
     </b-card>
   </div>
@@ -43,12 +81,12 @@ import {
   FiltersMode,
   MEASURES,
   DIMENSIONTS,
-  FILTERS,
+  FILTERS
 } from "../constants/index.js";
 
 export default {
   name: "ItemOptionPanel",
-  props: ['itemIndex', 'itemType'],
+  props: ["itemIndex", "itemType"],
   data() {
     return {
       measuresMode: MeasuresMode,
@@ -65,18 +103,18 @@ export default {
     };
   },
   computed: {
-    measuresQue () {
+    measuresQue() {
       return this.$store.getters.getStateMeasuresQue;
     },
-    dimensionsQue () {
+    dimensionsQue() {
       return this.$store.getters.getStateDimensionsQue;
     },
-    filtersQue () {
+    filtersQue() {
       return this.$store.getters.getStateFiltersQue;
     }
   },
-  mounted: function () {
-    switch(this.itemType) {
+  mounted: function() {
+    switch (this.itemType) {
       case MEASURES:
         this.mMode = this.measuresQue[this.itemIndex].mode;
         this.title = this.measuresQue[this.itemIndex].label;
@@ -90,21 +128,21 @@ export default {
         this.fParam = this.filtersQue[this.itemIndex].fParam;
         this.title = this.filtersQue[this.itemIndex].label;
         break;
-    } 
+    }
   },
   methods: {
     changeMeasuresMode(index) {
-       this.mMode = index;
+      this.mMode = index;
     },
     changeDimensionsMode(index) {
-       this.dMode = index;
+      this.dMode = index;
     },
     changeFiltersMode(index) {
-       this.fMode = index;
+      this.fMode = index;
     },
     onButtonClick(set) {
       if (set) {
-        switch(this.itemType) {
+        switch (this.itemType) {
           case MEASURES:
             this.measuresQue[this.itemIndex].mMode = this.mMode;
             break;
@@ -117,8 +155,7 @@ export default {
             break;
         }
       }
-      this.$emit('close', null);
-      
+      this.$emit("close", null);
     }
   }
 };
