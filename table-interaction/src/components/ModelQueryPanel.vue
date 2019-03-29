@@ -353,14 +353,13 @@ export default {
       this.$store.dispatch("updateDimensionsSrc", dimensionSrcFromCSV);
 
       for (let i = 1; i < lines.length; i++) {
-        let values = lines[i].split(',');
+        let values = lines[i].split(",");
         let row = {};
         headings.forEach((head, index) => {
-          row[head] = values [index];
+          row[head] = values[index];
         });
         this.dataSet.push(row);
       }
-      console.log(this.dataSet);
 
       this.showOptionMeasures = [];
       this.measuresSrc.forEach((element, index) => {
@@ -378,12 +377,13 @@ export default {
     excute() {
       let resultSet = [];
       this.dataSet.forEach(row => {
-        let add = false
+        let add = false;
         if (this.filtersQue[0] === null) {
           add = true;
         } else {
           this.filtersQue.forEach(filter => {
-            if (filter.fMode === 0 && row[filter.id] === filter.fParam) { // is one of
+            if (filter.fMode === 0 && row[filter.id] === filter.fParam) {
+              // is one of
               add = true;
             }
           });
@@ -396,7 +396,9 @@ export default {
         if (!element) return;
         if (!element.dMode) return;
         resultSet.sort((a, b) => {
-          return element.dMode === 1 ? a[element.id] - b[element.id] : b[element.id] - a[element.id];
+          return element.dMode === 1
+            ? a[element.id] - b[element.id]
+            : b[element.id] - a[element.id];
         });
       });
 
