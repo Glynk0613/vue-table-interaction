@@ -5,18 +5,46 @@
 }
 .panel {
   flex: 1;
-  border: 1px gray solid;
+  border: 1px rgba(0,0,0,0.3) solid;
   margin: 5px;
   background-color: white;
   display: flex;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
+  border-radius: 2px;
 }
 .panel-model {
-  width: 300px;
-  border-right: 1px gray solid;
+  width: 350px;
+  border-right: 1px rgba(0,0,0,0.3) solid;
   background-color: #e6e6e6;
+  overflow-x: hidden;
+}
+.tooltip-inner {
+  font-size: 10px;
+}
+.card-body {
+  padding: 10px;
 }
 .panel-query {
   width: 100%;
+  .tabs {
+    height: 100vh;
+    .card-header {
+      padding: 0px;
+      ul {
+        height: 25px;
+        margin: 0px !important;
+        li {
+          height: 25px;
+          a {
+            padding: 5px;
+            border-radius: 0px !important;
+            font-size: 10px;
+            height: 26px;
+          }
+        }
+      }
+    }
+  }
 }
 .btn-tooltip {
   font-size: 6px !important;
@@ -25,22 +53,51 @@
   width: 10px !important;
   height: 10px !important;
 }
+.panel-titlebar {
+  font-size: 10px;
+  height: 25px;
+  line-height: 25px;
+  padding: 0 5px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12)!important;
+}
+.panel-content {
+  padding: 5px;
+}
+.search-box {
+  font-size: 10px;
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  height: 20px;
+  padding: 0 10px;
+}
+.item-root {
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
 .item-label {
-  font-size: 12px;
+  font-size: 10px;
 }
 .item-wrapper {
   border-radius: 2px;
   border: 1px solid #e6e6e6;
   min-height: 30px;
 }
+.btn-wrapper {
+  text-align: right !important;
+  button {
+    font-size: 12px;
+  }
+}
 .item-content {
   display: flex;
   justify-content: space-between;
-  background-color: lightblue;
+  background-image: linear-gradient(#eaf2f9, #ddeaf8);
   border-radius: 2px;
-  border: 1px solid rgb(99, 99, 194);
+  border: 1px solid #bbd7ec;
   display: flex;
-  margin: 2px;
+  margin: 3px;
 
   .item-remove {
     display: none;
@@ -53,7 +110,6 @@
       display: block;
     }
   }
-
   .item-left {
     display: flex;
     cursor: pointer;
@@ -61,6 +117,9 @@
     .item-drop {
       font-size: 12px;
       padding: 2px 4px;
+    }
+    .dropdown-item {
+      font-size: 12px;
     }
     .item-mode {
       font-size: 10px;
@@ -76,11 +135,38 @@
         .card-body {
           padding: 10px;
           .card-title {
-            font-size: 14px;
+            font-size: 12px;
+          }
+          .dropdown {
+            width: 100%;
+            button {
+              padding: 3px 10px;
+              font-size: 12px;
+              text-align: left;
+              border: 1px solid #e6e6e6;
+              &::after {
+                display: none;
+              }
+              &::before {
+                display: inline-block;
+                margin-right: 10px;
+                vertical-align: 0.255em;
+                content: "";
+                border-top: 0.3em solid;
+                border-right: 0.3em solid transparent;
+                border-bottom: 0;
+                border-left: 0.3em solid transparent;
+              }
+            }
           }
         }
       }
     }
+  }
+  .item-model {
+    margin: 0px;
+    display: flex;
+    align-items: center;
   }
 
 } 
@@ -97,4 +183,7 @@
 }
 .item-blank {
   min-height: 30px;
+}
+.content-panel {
+  padding: 10px;
 }

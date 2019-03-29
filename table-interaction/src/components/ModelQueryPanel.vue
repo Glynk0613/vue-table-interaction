@@ -1,36 +1,44 @@
 <template>
   <div class="panel">
     <div class="panel-model">
-      <b-form-input type="text" placeholder="Enter your name"/>
-      <div v-b-toggle.collapse_left class="item-root">
-        <i class="fa fa-chevron-right"></i>
-        <span>Test Task Data</span>
+      <div class="panel-titlebar">
+        <i class="fa fa-circle"></i>
+        <span class="ml-2">Model</span>
       </div>
-      <b-collapse id="collapse_left" class="mt-2">
-        <div class="item-label">Meaures</div>
-        <draggable v-model="measuresSrc" :group="{ name: 'measures', pull: 'clone', put: false}">
-          <transition-group>
-            <div v-for="(element, index) in measuresSrc" :key="'sm'+index" class="item-model">
-              <span class="item-icon">#</span>
-              <span>{{ element.id }}</span>
-            </div>
-          </transition-group>
-        </draggable>
-        <div class="item-label">Dimensions</div>
-        <draggable
-          v-model="dimensionsSrc"
-          :group="{ name: dimensionsId, pull: 'clone', put: false}"
-        >
-          <transition-group>
-            <div v-for="(element, index) in dimensionsSrc" :key="'sd'+index" class="item-model">
-              <span class="item-icon">
-                <i class="fa fa-font"></i>
-              </span>
-              <span>{{ element.id }}</span>
-            </div>
-          </transition-group>
-        </draggable>
-      </b-collapse>
+      <div class="panel-content">
+        <input type="text" class="search-box" placeholder="Enter your name"/>
+        <div v-b-toggle.collapse_left class="item-root mt-2" @click="showCollapse = !showCollapse">
+          <i v-if="showCollapse" class="fa fa-angle-down mr-1"></i>
+          <i v-else class="fa fa-angle-right mr-1"></i>
+
+          <span>Test Task Data</span>
+        </div>
+        <b-collapse id="collapse_left" class="mt-1">
+          <div class="item-label ml-2">Meaures</div>
+          <draggable v-model="measuresSrc" :group="{ name: 'measures', pull: 'clone', put: false}">
+            <transition-group>
+              <div v-for="(element, index) in measuresSrc" :key="'sm'+index" class="item-model">
+                <span class="item-icon">#</span>
+                <span>{{ element.id }}</span>
+              </div>
+            </transition-group>
+          </draggable>
+          <div class="item-label ml-2">Dimensions</div>
+          <draggable
+            v-model="dimensionsSrc"
+            :group="{ name: dimensionsId, pull: 'clone', put: false}"
+          >
+            <transition-group>
+              <div v-for="(element, index) in dimensionsSrc" :key="'sd'+index" class="item-model">
+                <span class="item-icon">
+                  <i class="fa fa-font"></i>
+                </span>
+                <span>{{ element.id }}</span>
+              </div>
+            </transition-group>
+          </draggable>
+        </b-collapse>
+      </div>
     </div>
     <div class="panel-query">
       <b-tabs card v-if="showOptionMeasures">
@@ -72,7 +80,7 @@
               </draggable>
             </div>
 
-            <div class="item-label">
+            <div class="item-label mt-2">
               Dimensions
               <b-button v-b-tooltip.hover title="Tooltip content2" class="btn-tooltip">?</b-button>
             </div>
@@ -119,7 +127,7 @@
               </draggable>
             </div>
 
-            <div class="item-label">
+            <div class="item-label mt-2">
               Filters
               <b-button v-b-tooltip.hover title="Tooltip content" class="btn-tooltip">?</b-button>
             </div>
@@ -159,12 +167,16 @@
               </draggable>
             </div>
           </b-card-text>
+          <div class="btn-wrapper">
+            <button class="btn-query btn btn-primary btn-sm" @click="excute">Run Query</button>
+          </div>
+
         </b-tab>
         <b-tab title="SQL Mode">
           <b-card-text>Tab Contents 2</b-card-text>
         </b-tab>
       </b-tabs>
-      <button class="button-query" @click="excute">Run Query</button>
+      
     </div>
   </div>
 </template>
@@ -199,7 +211,8 @@ export default {
       showOptionMeasures: null,
       showOptionDemensions: null,
       showOptionFilters: null,
-      dataSet: null
+      dataSet: null,
+      showCollapse: false
     };
   },
   mounted: function() {

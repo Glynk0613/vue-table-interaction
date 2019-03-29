@@ -1,5 +1,5 @@
 <template>
-  <div class="panel">
+  <div class="panel content-panel">
     <div class="row">
       <div class="col-sm-12">
         <v-chart v-if="option && resultSet" :options="option"/>
